@@ -1,6 +1,6 @@
 # Notify
 
-A notification service.  This application creates a publish and subscribe notification service.
+A notification service.  This application creates a publish and subscribe notification service.  It is simple to use, when you have the service up and running, you post your subscribers with their contact info into the channel that you want them to be notified for.  Then you add the notification publish post to your application.  When you application publishes a json object with a title and msg for a particular channel, Notify will contact each subscriber of that channel.
 
 ## Features
 
@@ -16,6 +16,13 @@ A notification service.  This application creates a publish and subscribe notifi
 
 ```
 npm install notify -g
+```
+
+## Configure
+
+```
+notify init
+# answer the config questions
 ```
 
 ## Usage
@@ -35,7 +42,7 @@ Subscribe to Channel
 {
   "name": "unique-name",
   "type": (http|email|sms|phone),
-  "src": "value here"
+  "value": "value here"
 }
 ```
 
@@ -46,3 +53,22 @@ Publish to Channel
 ```
 { "title": "", "msg": ""}
 ```
+
+## LICENSE
+
+MIT
+
+## DESIGN GOALS
+
+* Simple API
+* Simple DataStore
+* Durable and efficient notifications
+* Basic Authentication
+
+## Contributions
+
+* Welcome but should stay true to the design goals
+
+## Thanks
+
+
