@@ -19,7 +19,8 @@ var app = module.exports = function(config) {
 
   // get all channels
   server.get('/', function(req, res, next) {
-    db.createReadStream().pipe(res);
+    //db.createReadStream().pipe(res);
+    res.send('Welcome to Notify Service');
     return next();
   });
 
