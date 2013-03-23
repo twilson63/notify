@@ -30,23 +30,27 @@ if (init) {
   };
   function password(password) {
     config.password = password;
-    commander.prompt('smtp service:', service);
+    commander.prompt('smtp service: ', service);
   };
   function service(service) {
     config.smtp.service = service;
-    commander.prompt('email auth user:', emailuser);
+    commander.prompt('email auth user: ', emailuser);
   };
   function emailuser(emailuser) {
     config.smtp.auth.user = emailuser;
-    commander.prompt('email auth user:', emailpassword);
+    commander.prompt('email auth password: ', emailpassword);
   };
   function emailpassword(emailpassword) {
     config.smtp.auth.pass = emailpassword;
-    commander.prompt('email auth password:', emailpassword);
+    done();
   };
 
   function done() {
     fs.writeFileSync('./config.json', JSON.stringify(config));
+    console.log('successfully created config.json');
+    console.log('now you can start the notify service');
+    console.log('notify -C ./config.json');
+    process.exit(0);
   };
 } else {
   var config;

@@ -10,7 +10,7 @@ var db = levelup('./notifydb', { encoding: 'json' });
 var app = module.exports = function(config) {
   var server = restify.createServer({ name: 'notify' });
   var port = config.port || 3000;
-  var smtp = nodemailer.createTransport("SMTP", config.smtp);
+  var smtp = mailer.createTransport("SMTP", config.smtp);
 
   // setup body Parser
   server.use(restify.bodyParser());
@@ -32,6 +32,16 @@ var app = module.exports = function(config) {
 
   // publish
   server.post('/publish/:channel', function(req, res, next) {
+    // validate subscriber
+    if (!req.params.title) { 
+      res.send(500, { error: 'publish title is required!'}); 
+      return next();
+    }
+    if (!req.params.msg) { 
+      res.send(500, { error: 'publish msg is required!'}); 
+      return next();
+    }
+
     db.get(req.params.channel, function(err, channel) {
       if (err) { res.send(404); return next(); }
       notify(req.params, channel.subscriptions);
@@ -42,17 +52,32 @@ var app = module.exports = function(config) {
 
   // subscribe
   server.post('/subscribe/:channel', function(req, res, next) {
+    // validate subscriber
+    if (!req.params.name) { 
+      res.send(500, { error: 'subscriber name is required!'}); 
+      return next();
+    }
+    if (!req.params.service) { 
+      res.send(500, { error: 'subscriber service is required!'}); 
+      return next();
+    }
+    // fetch channel data
     db.get(req.params.channel, function(err, channel) {
-      if (err) { channel = { subscriptions: []}; }
-      channel.name = req.params.channel;
+      // if not found then create new channel
+      if (err) { channel = { name: req.params.channel, subscriptions: []}; }
+      // fetch subscription
       var subscription = _(channel.subscriptions).findWhere({name: req.params.name});
+      // if not found add subscription to channel
       if (!subscription) { 
         channel.subscriptions.push(req.params);
       } else {
+        // otherwise update subscription with new information
         _(subscription).extend(req.params);
       }
+      // save channel to db
       db.put(channel.name, channel, function(err) {
         if (err) { res.send(500); return next(); }
+        // send success
         res.send(200);
         return next();
       });
@@ -82,10 +107,10 @@ var app = module.exports = function(config) {
     .when("email", function(contact, info) {
       mail(contact.address, info);
     })
-    .when("http", function(contact, msg) {
+    .when("http", function(contact, info) {
       post(contact.href, info);
     })
-    .when("sms", function(contact, msg) {
+    .when("sms", function(contact, info) {
       console.log('POST' + contact.phone);
     })
     ;

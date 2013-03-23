@@ -18,5 +18,9 @@
     "multimethod": "~0.1.0",
     "nodemailer": "~0.3.44",
     "request": "~2.16.6"
+  },
+  "devDependencies": {
+    "expect.js": "~0.2.0",
+    "mocha": "~1.8.2"
   }
 }
