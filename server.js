@@ -12,6 +12,8 @@ var app = module.exports = function(config) {
   var port = config.port || 3000;
   var smtp = mailer.createTransport("SMTP", config.smtp);
 
+  // TODO: add authentication...
+
   // setup body Parser
   server.use(restify.bodyParser());
 
