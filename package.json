@@ -13,6 +13,10 @@
     "restify": "~2.3.4",
     "bunyan": "~0.20.0",
     "levelup": "~0.6.2",
-    "commander": "~1.1.1"
+    "commander": "~1.1.1",
+    "underscore": "~1.4.4",
+    "multimethod": "~0.1.0",
+    "nodemailer": "~0.3.44",
+    "request": "~2.16.6"
   }
 }

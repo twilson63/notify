@@ -33,6 +33,7 @@ Subscribe to Channel
 
 ```
 {
+  "name": "unique-name",
   "type": (http|email|sms|phone),
   "src": "value here"
 }
